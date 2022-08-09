@@ -2,74 +2,72 @@ class Bot {
 
     rounds = 0;
 
-    bot = {
-        'dynamites': 0,
+    robot = {
+        'dynamites': 100,
         'waterBlns': 0,
         'scissors': 0,
         'papers': 0,
         'rocks': 0
     };
 
-    me = this.bot
-    opponent = this.bot;
+    myBot = this.robot;
+    opponent = this.robot;
+
+    playRandom() {
+        let move = Math.floor(Math.random() * 5);
+        switch (move) {
+            case 0:
+                return 'R';
+            case 1:
+                return 'P';
+            case 2:
+                return 'S';
+            case 3:
+                return 'D';
+            case 4:
+                return 'W';
+        }
+    }
+
+
+    playClever() {
+        let explode = Math.floor(Math.random() * 3);
+
+        if (explode === 1 && this.myBot.dynamites >= 1) {
+            return "D";
+        } else if (explode === 2) {
+            return "W";
+        } else if (explode === 3) {
+            this.playRandom();
+        }
+    }
+
+    countOpponentsDynamites(round) {
+        if ( round.p2 === 'D') {
+            this.opponent.dynamites -= 1;
+        }
+    }
+
+    countMyDynamites(round) {
+        if (round.p1 === 'D') {
+            this.myBot.dynamites -= 1;
+        }
+    }
 
     makeMove(gamestate) {
 
-        function countOpponentsDynamites() {
-            if (gamestate.rounds[this.rounds].p2 === 'D') {
-                this.opponent.dynamites += 1;
-            }
+        if (gamestate.rounds.length -1 >1) {
+            this.countOpponentsDynamites( gamestate.rounds[this.rounds-1] );
+            this.countMyDynamites( gamestate.rounds[this.rounds-1] );
         }
 
-        function countMyDynamites() {
-            if (gamestate.rounds[this.rounds].p1 === 'D') {
-                this.me.dynamites += 1;
-            }
-        }
-
-        // function play random - plays randomly
-        function playRandom() {
-            let move = Math.floor(Math.random() * 5);
-            switch (move) {
-                case 0:
-                    return 'R';
-                case 1:
-                    return 'P';
-                case 2:
-                    return 'S';
-                case 3:
-                    return 'D';
-                case 4:
-                    return 'W';
-            }
-        }
-
-        // function play - plays based on data
-        function playClever() {
-            let explode = Math.floor(Math.random() * 3);
-            if (explode === 1 && this.me.dynamites >= 1) {
-                return "D";
-            } else if (explode === 2) {
-                return "W";
-            } else {
-                playRandom();
-            }
-
-        }
-
-
-        if (gamestate.rounds) {
-            countOpponentsDynamites();
-            countMyDynamites();
-        }
+        console.log("round: " + this.rounds);//debugging
+        console.log("dynamites: " + this.myBot.dynamites);//debugging
 
         this.rounds += 1;
 
-         console.log(gamestate.rounds)//debugging
-        // console.log(me.dynamites);//debugging
-        console.log("round: " + this.rounds);//debugging
+        return (this.rounds <= 50) ? this.playRandom(): this.playClever();
 
-        return (this.rounds < 50) ? playRandom() : playClever();
     }
 }
 
