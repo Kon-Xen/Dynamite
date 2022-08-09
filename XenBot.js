@@ -1,28 +1,31 @@
 class Bot {
 
+    rounds = 0;
+
+    bot = {
+        'dynamites': 0,
+        'waterBlns': 0,
+        'scissors': 0,
+        'papers': 0,
+        'rocks': 0
+    };
+
+    me = this.bot
+    opponent = this.bot;
+
     makeMove(gamestate) {
 
-        let rounds = 0;
+        function countOpponentsDynamites() {
+            if (gamestate.rounds[this.rounds].p2 === 'D') {
+                this.opponent.dynamites += 1;
+            }
+        }
 
-        let player = {
-            'dynamites': 0,
-            'waterBlns': 0,
-            'scissors': 0,
-            'papers': 0,
-            'rocks': 0
-        };
-
-        let me = player
-        let opponent = player;
-
-        //todo  keep score of all that is played ? [ ]
-        // count the dynamites / compare to what was played all ready
-
-        // todo compare how many pl1/pl2 has left compared to how many dynamites I have.
-        //todo random engine.
-
-        //console.log(gamestate.rounds[1])//debugging
-        //todo function playClever - use the data above to reach decision and paas it ot the play function
+        function countMyDynamites() {
+            if (gamestate.rounds[this.rounds].p1 === 'D') {
+                this.me.dynamites += 1;
+            }
+        }
 
         // function play random - plays randomly
         function playRandom() {
@@ -43,17 +46,30 @@ class Bot {
 
         // function play - plays based on data
         function playClever() {
-            return 'D'; // temporary for testing
+            let explode = Math.floor(Math.random() * 3);
+            if (explode === 1 && this.me.dynamites >= 1) {
+                return "D";
+            } else if (explode === 2) {
+                return "W";
+            } else {
+                playRandom();
+            }
+
         }
 
-        if ( rounds < 50){
-            rounds = +1;
-            return playRandom();
-        } else {
-            rounds = +1;
-            return playClever();
+
+        if (gamestate.rounds) {
+            countOpponentsDynamites();
+            countMyDynamites();
         }
 
+        this.rounds += 1;
+
+         console.log(gamestate.rounds)//debugging
+        // console.log(me.dynamites);//debugging
+        console.log("round: " + this.rounds);//debugging
+
+        return (this.rounds < 50) ? playRandom() : playClever();
     }
 }
 
