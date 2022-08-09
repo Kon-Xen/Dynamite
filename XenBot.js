@@ -12,29 +12,47 @@ class Bot {
             'rocks': 0
         };
 
-        let player_1 = player
-        let player_2 = player;
-        //move is unique
+        let me = player
+        let opponent = player;
 
-        let IAm = ""; // needs a function to determine
-
-        // who am I [ ]
-        // count rounds [V]
-        // keep score of all that is played ? [ ]
-        // how do we know who is which player?. []
+        //todo  keep score of all that is played ? [ ]
         // count the dynamites / compare to what was played all ready
 
-        // compare how many pl1/pl2 has left compared to how many dynamites I have.
+        // todo compare how many pl1/pl2 has left compared to how many dynamites I have.
+        //todo random engine.
 
-        console.log(gamestate.rounds[1])//debugging
-        // function decide - use the data above to reach decision and paas it ot the play function
+        //console.log(gamestate.rounds[1])//debugging
+        //todo function playClever - use the data above to reach decision and paas it ot the play function
 
-        // function play - takes input from decision
-        function play(){
-            return 'R'
+        // function play random - plays randomly
+        function playRandom() {
+            let move = Math.floor(Math.random() * 5);
+            switch (move) {
+                case 0:
+                    return 'R';
+                case 1:
+                    return 'P';
+                case 2:
+                    return 'S';
+                case 3:
+                    return 'D';
+                case 4:
+                    return 'W';
+            }
         }
-        rounds = +1;
-        return play();
+
+        // function play - plays based on data
+        function playClever() {
+            return 'D'; // temporary for testing
+        }
+
+        if ( rounds < 50){
+            rounds = +1;
+            return playRandom();
+        } else {
+            rounds = +1;
+            return playClever();
+        }
 
     }
 }
