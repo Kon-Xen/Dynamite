@@ -13,40 +13,52 @@ class Bot {
     myBot = this.robot;
     opponent = this.robot;
 
-    playRandom() {
-        let move = Math.floor(Math.random() * 5);
+
+    playRandom(max) {
+        let move = Math.floor(Math.random() * max);
         switch (move) {
             case 0:
+                // console.log("Rock");
                 return 'R';
             case 1:
+                // console.log("Paper");
                 return 'P';
             case 2:
+                // console.log("Scissors");
                 return 'S';
             case 3:
+                // console.log("Dynamite");
                 return 'D';
             case 4:
+                // console.log("Watter");
                 return 'W';
         }
     }
 
 
     playClever() {
-        let explode = Math.floor(Math.random() * 3);
+        let explode = Math.floor(Math.random() * 2);
 
-        if (explode === 1 && this.myBot.dynamites >= 1) {
+        if (explode === 0 && this.myBot.dynamites >= 1) {
+            console.log("Clever Dynamite");
             return "D";
-        } else if (explode === 2) {
+        }
+
+        if (explode === 1 &&this.opponent.dynamites < 40) {
+            console.log("Clever Water");
             return "W";
-        } else if (explode === 3) {
-            this.playRandom();
+        } else {
+            console.log("RANDOM!!!!!")
+            this.playRandom(2);
         }
     }
 
     countOpponentsDynamites(round) {
-        if ( round.p2 === 'D') {
+        if (round.p2 === 'D') {
             this.opponent.dynamites -= 1;
         }
     }
+
 
     countMyDynamites(round) {
         if (round.p1 === 'D') {
@@ -54,19 +66,23 @@ class Bot {
         }
     }
 
+
     makeMove(gamestate) {
 
-        if (gamestate.rounds.length -1 >1) {
-            this.countOpponentsDynamites( gamestate.rounds[this.rounds-1] );
-            this.countMyDynamites( gamestate.rounds[this.rounds-1] );
+        if (gamestate.rounds.length - 1 > 1) {
+            this.countOpponentsDynamites(gamestate.rounds[this.rounds - 1]);
+            this.countMyDynamites(gamestate.rounds[this.rounds - 1]);
         }
+
 
         console.log("round: " + this.rounds);//debugging
         console.log("dynamites: " + this.myBot.dynamites);//debugging
+        console.log(gamestate.rounds[this.rounds - 1]);
+
 
         this.rounds += 1;
 
-        return (this.rounds <= 50) ? this.playRandom(): this.playClever();
+        return (this.rounds <= 50) ? this.playRandom(4) : this.playClever();
 
     }
 }
