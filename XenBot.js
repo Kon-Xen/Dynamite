@@ -45,7 +45,7 @@ class Bot {
         if (this.playDynamite()) {
             return "D";
         }
-        return this.playRandom(2);
+        return this.playRandom(3);
     }
 
 
