@@ -1,6 +1,7 @@
 class Bot {
 
-    rounds = 0;
+    roundCount = 0;
+    roundWeight = 1;
 
     robot = {
         'dynamites': 100,
@@ -39,53 +40,125 @@ class Bot {
 
 
     playClever() {
-        let explode = Math.floor(Math.random() * 2);
 
-        if (explode === 0 && this.myBot.dynamites >= 1) {
+        if (this.playDynamite()) {
             console.log("Clever Dynamite");
             return "D";
         }
-
-        if (explode === 1 &&this.opponent.dynamites < 40) {
-            console.log("Clever Water");
-            return "W";
-        } else {
+        // if (this.playWatter()) {
+        //     console.log("Clever Water");
+        //     return "W";
+        // } else {
             console.log("RANDOM!!!!!")
             return this.playRandom(2);
+
+    }
+
+    // countOpponentsDynamites(round) {
+    //     if (round.p2 === 'D') {
+    //         this.opponent.dynamites -= 1;
+    //     }
+    // }
+
+
+    // countMyDynamites(round) {
+    //     if (round.p1 === 'D') {
+    //         this.myBot.dynamites -= 1;
+    //     }
+    // }
+
+    //---------------------------------
+    // Look at previous round (round - 1) and record what
+    // each player has played.
+    // needs to check if you have rounds first!
+
+    // could be a function.
+    updateMyBot(round) {
+        switch (round.p1) {
+            case 'D':
+                player_1.dynamites += 1;
+                break;
+            case 'W':
+                player_1.waterBlns += 1;
+                break;
+            case 'S':
+                player_1.scissors += 1;
+                break;
+            case 'P':
+                player_1.papers += 1;
+                break;
+            case 'R':
+                player_1.rocks += 1;
+                break;
         }
     }
 
-    countOpponentsDynamites(round) {
-        if (round.p2 === 'D') {
-            this.opponent.dynamites -= 1;
+    updateOpponent(round) {
+        switch (round.p2) {
+            case 'D':
+                player_2.dynamites += 1;
+                break;
+            case 'W':
+                player_2.waterBlns += 1;
+                break;
+            case 'S':
+                player_2.scissors += 1;
+                break;
+            case 'P':
+                player_2.papers += 1;
+                break;
+            case 'R':
+                player_2.rocks += 1;
+                break;
         }
     }
 
-
-    countMyDynamites(round) {
-        if (round.p1 === 'D') {
-            this.myBot.dynamites -= 1;
+    adjustWeight(round) {
+        if (round.p1 === round.p2) {
+            this.roundWeight += 1;
         }
+    }
+
+// if statements to prevent overuse of dynamite and or waterballoons
+// code will have to be nested inside these?
+    playDynamite() {
+
+        if (this.myBot.dynamites >= 0) {
+            if (this.roundWeight > 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+// returns true if the opponent still has dynamite. false if not
+
+    playWatter() {
+        return (player_2.dynamites >= 0) ? true : false;
     }
 
 
     makeMove(gamestate) {
 
-        if (gamestate.rounds.length - 1 > 1) {
-            this.countOpponentsDynamites(gamestate.rounds[this.rounds - 1]);
-            this.countMyDynamites(gamestate.rounds[this.rounds - 1]);
+        if (gamestate.rounds.length !== 0) {
+            // this.countOpponentsDynamites(gamestate.rounds[this.roundCount - 1]);
+            // this.countMyDynamites(gamestate.rounds[this.roundCount - 1]);
+            this.updateMyBot(gamestate.rounds[this.roundCount - 1]);
+            this.updateOpponent(gamestate.rounds[this.roundCount - 1]);
+            this.adjustWeight(gamestate.rounds[this.roundCount - 1]);
         }
 
 
-        console.log("round: " + this.rounds);//debugging
+        console.log("round: " + this.roundCount);//debugging
         console.log("dynamites: " + this.myBot.dynamites);//debugging
         console.log(gamestate.rounds[this.rounds - 1]);
 
 
-        this.rounds += 1;
+        this.roundCount += 1;
 
-        return (this.rounds <= 50) ? this.playRandom(4) : this.playClever();
-
+        return this.playClever();
+        // ternary javascript
     }
 }
 
