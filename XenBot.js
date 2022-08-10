@@ -76,19 +76,19 @@ class Bot {
     updateMyBot(round) {
         switch (round.p1) {
             case 'D':
-                player_1.dynamites += 1;
+                this.myBot.dynamites += 1;
                 break;
             case 'W':
-                player_1.waterBlns += 1;
+                this.myBot.waterBlns += 1;
                 break;
             case 'S':
-                player_1.scissors += 1;
+                this.myBot.scissors += 1;
                 break;
             case 'P':
-                player_1.papers += 1;
+                this.myBot.papers += 1;
                 break;
             case 'R':
-                player_1.rocks += 1;
+                this.myBot.rocks += 1;
                 break;
         }
     }
@@ -96,19 +96,19 @@ class Bot {
     updateOpponent(round) {
         switch (round.p2) {
             case 'D':
-                player_2.dynamites += 1;
+                this.opponent.dynamites += 1;
                 break;
             case 'W':
-                player_2.waterBlns += 1;
+                this.opponent.waterBlns += 1;
                 break;
             case 'S':
-                player_2.scissors += 1;
+                this.opponent.scissors += 1;
                 break;
             case 'P':
-                player_2.papers += 1;
+                this.opponent.papers += 1;
                 break;
             case 'R':
-                player_2.rocks += 1;
+                this.opponent.rocks += 1;
                 break;
         }
     }
@@ -116,6 +116,7 @@ class Bot {
     adjustWeight(round) {
         if (round.p1 === round.p2) {
             this.roundWeight += 1;
+            console.log( "roundweight: " + this.roundWeight);
         }
     }
 
@@ -152,10 +153,11 @@ class Bot {
 
         console.log("round: " + this.roundCount);//debugging
         console.log("dynamites: " + this.myBot.dynamites);//debugging
-        console.log(gamestate.rounds[this.rounds - 1]);
+        console.log(gamestate.rounds[this.roundCount - 1]);
 
 
         this.roundCount += 1;
+        this.roundWeight = 1;
 
         return this.playClever();
         // ternary javascript
