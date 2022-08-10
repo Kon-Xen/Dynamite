@@ -32,6 +32,8 @@ class Bot {
             case 4:
                 // console.log("Watter");
                 return 'W';
+            default:
+                return 'P';
         }
     }
 
@@ -49,7 +51,7 @@ class Bot {
             return "W";
         } else {
             console.log("RANDOM!!!!!")
-            this.playRandom(2);
+            return this.playRandom(2);
         }
     }
 
