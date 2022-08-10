@@ -3,7 +3,7 @@ class Bot {
     makeMove(gamestate) {
 
         let rounds = 0;
-
+        
         let player = {
             'dynamites': 0,
             'waterBlns': 0,
@@ -12,9 +12,60 @@ class Bot {
             'rocks': 0
         };
 
-        let player_1 = player
+        let player_1 = player;
         let player_2 = player;
         //move is unique
+
+        // Look at previous round (round - 1) and record what
+        // each player has played.
+
+        switch (gamestate.rounds[(rounds - 1)].p1) {
+            case 'D':
+                player_1.dynamites += 1;
+                break;
+            case 'W':
+                player_1.waterBlns += 1;
+                break;
+            case 'S':
+                player_1.scissors += 1;
+                break;
+            case 'P':
+                player_1.papers += 1;
+                break;
+            case 'R':
+                player_1.rocks += 1;
+                break;
+        }
+
+        switch (gamestate.rounds[(rounds - 1)].p2) {
+            case 'D':
+                player_2.dynamites += 1;
+                break;
+            case 'W':
+                player_2.waterBlns += 1;
+                break;
+            case 'S':
+                player_2.scissors += 1;
+                break;
+            case 'P':
+                player_2.papers += 1;
+                break;
+            case 'R':
+                player_2.rocks += 1;
+                break;
+        }
+
+        // if statements to prevent overuse of dynamite and or waterballoons
+        // code will have to be nested inside these?
+        if (player_1.dynamites >= 100) {
+            //don't play 'D'
+        }
+
+        if (player_2.dynamites >= 100) {
+            // don't play 'W'
+        }
+
+
 
         let IAm = ""; // needs a function to determine
 
