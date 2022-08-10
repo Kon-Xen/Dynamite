@@ -1,41 +1,116 @@
 class Bot {
 
+    roundCount = 0;
+    roundWeight = 1;
+
+    robot = {
+        'dynamites': 100,
+        'waterBlns': 0,
+        'scissors': 0,
+        'papers': 0,
+        'rocks': 0
+    };
+
+    myBot = this.robot;
+    opponent = this.robot;
+
+
+    playRandom(max) {
+        let move = Math.floor(Math.random() * max);
+        switch (move) {
+            case 0:
+                return 'R';
+            case 1:
+                return 'P';
+            case 2:
+                return 'S';
+            case 3:
+                return 'D';
+            case 4:
+                return 'W';
+            default:
+                return 'P';
+        }
+    }
+
+
+    playClever() {
+        if (this.playDynamite()) {
+            return "D";
+        }
+        return this.playRandom(2);
+    }
+
+
+    updateMyBot(round) {
+        switch (round.p1) {
+            case 'D':
+                this.myBot.dynamites -= 1;
+                break;
+            case 'W':
+                this.myBot.waterBlns += 1;
+                break;
+            case 'S':
+                this.myBot.scissors += 1;
+                break;
+            case 'P':
+                this.myBot.papers += 1;
+                break;
+            case 'R':
+                this.myBot.rocks += 1;
+                break;
+        }
+    }
+
+    updateOpponent(round) {
+        switch (round.p2) {
+            case 'D':
+                this.opponent.dynamites -= 1;
+                break;
+            case 'W':
+                this.opponent.waterBlns += 1;
+                break;
+            case 'S':
+                this.opponent.scissors += 1;
+                break;
+            case 'P':
+                this.opponent.papers += 1;
+                break;
+            case 'R':
+                this.opponent.rocks += 1;
+                break;
+        }
+    }
+
+    adjustWeight(round) {
+        if (round.p1 === round.p2) {
+            this.roundWeight += 1;
+        }
+    }
+    playDynamite() {
+        if (this.myBot.dynamites >= 0) {
+            return this.roundWeight > 1;
+        }
+    }
+
+
+    playWatter() {
+        return (player_2.dynamites >= 0) ? true : false;
+    }
+
+
     makeMove(gamestate) {
 
-        let rounds = 0;
-
-        let player = {
-            'dynamites': 0,
-            'waterBlns': 0,
-            'scissors': 0,
-            'papers': 0,
-            'rocks': 0
-        };
-
-        let player_1 = player
-        let player_2 = player;
-        //move is unique
-
-        let IAm = ""; // needs a function to determine
-
-        // who am I [ ]
-        // count rounds [V]
-        // keep score of all that is played ? [ ]
-        // how do we know who is which player?. []
-        // count the dynamites / compare to what was played all ready
-
-        // compare how many pl1/pl2 has left compared to how many dynamites I have.
-
-        console.log(gamestate.rounds[1])//debugging
-        // function decide - use the data above to reach decision and paas it ot the play function
-
-        // function play - takes input from decision
-        function play(){
-            return 'R'
+        if (gamestate.rounds.length !== 0) {
+            this.updateMyBot(gamestate.rounds[this.roundCount - 1]);
+            this.updateOpponent(gamestate.rounds[this.roundCount - 1]);
+            this.adjustWeight(gamestate.rounds[this.roundCount - 1]);
         }
-        rounds = +1;
-        return play();
 
+        this.roundCount += 1;
+        this.roundWeight = 1;
+
+        return this.playClever();
     }
 }
 
