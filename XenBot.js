@@ -1,18 +1,25 @@
 class Bot {
 
-    roundCount = 0;
-    roundWeight = 1;
+    constructor () {
+        this.roundCount = 0;
+        this.roundWeight = 1;
+    
+        this.myBot = {
+            'dynamites': 100,
+            'waterBlns': 0,
+            'scissors': 0,
+            'papers': 0,
+            'rocks': 0
+        };
 
-    robot = {
-        'dynamites': 100,
-        'waterBlns': 0,
-        'scissors': 0,
-        'papers': 0,
-        'rocks': 0
-    };
-
-    myBot = this.robot;
-    opponent = this.robot;
+        this.opponent = {
+            'dynamites': 100,
+            'waterBlns': 0,
+            'scissors': 0,
+            'papers': 0,
+            'rocks': 0
+        };
+    }
 
 
     playRandom(max) {
