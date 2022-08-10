@@ -65,7 +65,32 @@ class Bot {
             // don't play 'W'
         }
 
+        /* 
+        STRATEGY:
+        if last round was a draw, the value of the current round increases by 1.
+        SO: as round value increases, need for dynamite goes up.
+        BUT: Likelyhood of p2 playing dynamite goes up, so waterballoon could be more valueable...
 
+        OUTLINE:
+        1. Play randomly in opening ??? rounds.
+        2. Note opponents record. Are they more likely to play a certain hand?
+        3. Assume they are playing randomly?
+        4. Assume that over the course of the match (2000 rounds), their pattern will settle to around 33/33/33 (plus dynamites etc.)
+        5. As one "play" becomes more common, assume other 2 "plays" will become more likely. increase likelyhood of playing winning "play"
+        6. Increase likelyhood of dynamite when roundWeight increases.
+        7. Also increase likelyhood of waterballoon when roundValue increases??
+
+        */
+
+        //creating variable for round value
+        var roundWeight = 1;
+        
+        if (gamestate.rounds[(rounds - 1)].p1 === gamestate.rounds[(rounds - 1)].p2) {
+            roundWeight += 1;
+        }
+        else {
+            roundWeight = 1;
+        }
 
         let IAm = ""; // needs a function to determine
 
